@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var curentLatLng: LatLng
     lateinit var  clickLatlon:LatLng
 
-    var zoom = 15.0f
+    var zoom = 12.0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
