@@ -1,0 +1,12 @@
+{
+	"client":{
+		"cp_id":"890852200000000072",
+		"product_id":"9105385871708549295",
+		"client_id":"316667849630287040",
+		"client_secret":"F45709634B78DD301631BB82521B01F6446F72AE07A727DC4D06C54677985C37",
+		"app_id":"101857155",
+		"package_name":"com.huaweiHMSdemo.huawei",
+		"api_key":"CV6RzgCCh/dUCyu3tljW80kwGe3eNbknix/wWUOKWX45nSwm/TkXulu7q+jquo9bX/KG0nWKcooQOZuncS2xAKzYj9Ai"
+	},
+	"configuration_version":"1.0"
+}
