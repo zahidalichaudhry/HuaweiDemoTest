@@ -42,7 +42,11 @@ object Repository {
                             response: Response<ReversGeoCodeMain>
                         ) {
                             if (response.isSuccessful) {
-                                handler.handleWebserviceCallBackSuccess(response)
+                                if (response.body()?.returnDesc.equals("OK")&&response.body()?.returnCode.equals("0")){
+                                    handler.handleWebserviceCallBackSuccess(response)
+                                }else{
+                                    handler.handleWebserviceCallBackFailure(1)
+                                }
                             } else {
                                 // Handle error returned from server
                                 handler.handleWebserviceCallBackFailure(

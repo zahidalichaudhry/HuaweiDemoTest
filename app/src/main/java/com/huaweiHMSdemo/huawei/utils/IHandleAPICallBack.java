@@ -6,5 +6,6 @@ import retrofit2.Response;
 public interface IHandleAPICallBack<T> {
     void handleWebserviceCallBackSuccess(Response<T> response);
     void handleWebserviceCallBackFailure(String error);
+    void handleWebserviceCallBackFailure(Integer error);
     void onConnectionError();
 }

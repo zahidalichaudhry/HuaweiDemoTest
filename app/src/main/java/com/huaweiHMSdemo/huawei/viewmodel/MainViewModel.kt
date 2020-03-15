@@ -33,8 +33,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var repository: Repository = Repository
 
-    var geoCodedAdressCurrentLocation: MutableLiveData<ResultWrapper<ReversGeoCodeMain>> = MutableLiveData()
-    var geoMarkerSelectedAdress: MutableLiveData<ResultWrapper<ReversGeoCodeMain>> = MutableLiveData()
+    var geoCodedAdressCurrentLocation: MutableLiveData<ResultWrapper<ReversGeoCodeMain>> =
+        MutableLiveData()
+    var geoMarkerSelectedAdress: MutableLiveData<ResultWrapper<ReversGeoCodeMain>> =
+        MutableLiveData()
 
     val apiKey: String = ApiUtils.APIKEY
 
@@ -55,7 +57,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
         val body = getJsonEncode(latLng)
         if (body != null) {
-            Repository.getGeoAdress(body,apiKey, object :
+            Repository.getGeoAdress(body, apiKey, object :
                 IHandleAPICallBack<ReversGeoCodeMain> {
                 override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
                     geoCodedAdressCurrentLocation.postValue(
@@ -88,10 +90,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
+                override fun handleWebserviceCallBackFailure(error: Int?) {
+                    geoCodedAdressCurrentLocation.postValue(
+                        ResultWrapper<ReversGeoCodeMain>(
+                            Status.status.NOREUSLT,
+                            null,
+                            "NO Address Found"
+                        )
+                    )
+                }
+
 
             })
         }
     }
+
     fun getMarkerAddressFromLatLong(latLng: LatLng) {
 
         repository.init(_application)
@@ -106,7 +119,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         )
         val body = getJsonEncode(latLng)
         if (body != null) {
-            Repository.getGeoAdress(body,apiKey, object :
+            Repository.getGeoAdress(body, apiKey, object :
                 IHandleAPICallBack<ReversGeoCodeMain> {
                 override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
                     geoMarkerSelectedAdress.postValue(
@@ -139,18 +152,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     )
                 }
 
+                override fun handleWebserviceCallBackFailure(error: Int?) {
+                    geoMarkerSelectedAdress.postValue(
+                        ResultWrapper<ReversGeoCodeMain>(
+                            Status.status.NOREUSLT,
+                            null,
+                            "NO Address Found"
+                        )
+                    )
+
+                }
+
 
             })
         }
     }
+
     private fun getJsonEncode(latLng: LatLng): RequestBody? {
         val mainJson = JSONObject()
         val locationJSON = JSONObject()
-        locationJSON.put("lng",latLng.longitude)
-        locationJSON.put("lat",latLng.latitude)
-        mainJson.put("location",locationJSON)
-        mainJson.put("language","en")
-        mainJson.put("","CN")
+        locationJSON.put("lng", latLng.longitude)
+        locationJSON.put("lat", latLng.latitude)
+        mainJson.put("location", locationJSON)
+        mainJson.put("language", "en")
+        mainJson.put("", "CN")
         return RequestBody.create(
             MediaType.parse("application/json; charset=utf-8"),
             mainJson.toString()
@@ -193,7 +218,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 // Got last known location. In some rare situations this can be null.
             }
     }
-    fun cancelJobs(){
+
+    fun cancelJobs() {
         Repository.cancelJobs()
     }
 

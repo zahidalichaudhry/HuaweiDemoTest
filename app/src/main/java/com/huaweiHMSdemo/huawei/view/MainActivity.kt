@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private var mLocationPermissions = false
     private var mainViewModel: MainViewModel? = null
     lateinit var curentLatLng: LatLng
-    lateinit var  clickLatlon:LatLng
+    lateinit var clickLatlon: LatLng
 
     var zoom = 12.0f
 
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 Status.status.SUCCESS -> {
                     Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
                     UpdateCamera(curentLatLng)
-                    addMarker(curentLatLng,it.data.sites[0].formatAddress)
+                    addMarker(curentLatLng, it.data.sites[0].formatAddress)
 
                 }
                 Status.status.ERROR -> {
@@ -65,13 +65,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
 
                 }
+                Status.status.NOREUSLT -> {
+                    UpdateCamera(curentLatLng)
+                    addMarker(curentLatLng, it.message)
+                }
+
             }
         })
         mainViewModel?.geoMarkerSelectedAdress?.observe(this, Observer {
             when (it.status) {
                 Status.status.SUCCESS -> {
                     Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
-                    addClickMarker(clickLatlon,it.data.sites[0].formatAddress)
+                    addClickMarker(clickLatlon, it.data.sites[0].formatAddress)
                     UpdateCamera(clickLatlon)
                 }
                 Status.status.ERROR -> {
@@ -83,6 +88,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
 
+                }
+                Status.status.NOREUSLT -> {
+                    addClickMarker(clickLatlon, it.message)
+                    UpdateCamera(clickLatlon)
                 }
             }
         })
@@ -128,6 +137,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
 
                     }
+                    Status.status.NOREUSLT -> {
+
+                    }
+
                 }
             })
         } else {
@@ -171,7 +184,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun addClickMarker(latLng: LatLng,tile: String) {
+    fun addClickMarker(latLng: LatLng, tile: String) {
         clickMarker?.remove()
         val options = MarkerOptions()
             .position(latLng)
@@ -189,7 +202,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onMarkerDragEnd(marker: Marker) {
-                clickLatlon = LatLng(marker.position.latitude,marker.position.longitude)
+                clickLatlon = LatLng(marker.position.latitude, marker.position.longitude)
                 mainViewModel?.getMarkerAddressFromLatLong(clickLatlon)
             }
         })
@@ -257,6 +270,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         mainViewModel?.cancelJobs()

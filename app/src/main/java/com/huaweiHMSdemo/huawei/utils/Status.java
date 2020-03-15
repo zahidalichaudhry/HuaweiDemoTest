@@ -4,6 +4,7 @@ public class Status {
     public enum status {
         SUCCESS,
         ERROR,
-        LOADING
+        LOADING,
+        NOREUSLT
     }
 }
