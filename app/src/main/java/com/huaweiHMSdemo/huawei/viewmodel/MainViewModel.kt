@@ -42,129 +42,154 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    var loading: Boolean = false
+
 
     fun getCurrentAddressFromLatLong(latLng: LatLng) {
 
-        repository.init(_application)
+        if (!loading) {
+            loading=true
+
+
+            repository.init(_application)
 
 
 
-        geoCodedAdressCurrentLocation.postValue(
-            ResultWrapper<ReversGeoCodeMain>(
-                Status.status.LOADING,
-                null, "Loading"
+            geoCodedAdressCurrentLocation.postValue(
+                ResultWrapper<ReversGeoCodeMain>(
+                    Status.status.LOADING,
+                    null, "Loading"
+                )
             )
-        )
-        val body = getJsonEncode(latLng)
-        if (body != null) {
-            Repository.getGeoAdress(body, apiKey, object :
-                IHandleAPICallBack<ReversGeoCodeMain> {
-                override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
-                    geoCodedAdressCurrentLocation.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.SUCCESS,
-                            response.body(),
-                            "Success"
+            val body = getJsonEncode(latLng)
+            if (body != null) {
+                Repository.getGeoAdress(body, apiKey, object :
+                    IHandleAPICallBack<ReversGeoCodeMain> {
+                    override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
+                        geoCodedAdressCurrentLocation.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.SUCCESS,
+                                response.body(),
+                                "Success"
+                            )
                         )
-                    )
-                }
+                        loading=false
+                    }
 
-                override fun handleWebserviceCallBackFailure(error: String?) {
-                    geoCodedAdressCurrentLocation.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.ERROR,
-                            null,
-                            error
+                    override fun handleWebserviceCallBackFailure(error: String?) {
+                        geoCodedAdressCurrentLocation.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.ERROR,
+                                null,
+                                error
+                            )
                         )
-                    )
-                }
+                        loading=false
+
+                    }
 
 
-                override fun onConnectionError() {
-                    geoCodedAdressCurrentLocation.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.ERROR,
-                            null,
-                            "Connection Error"
+                    override fun onConnectionError() {
+                        geoCodedAdressCurrentLocation.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.ERROR,
+                                null,
+                                "Connection Error"
+                            )
                         )
-                    )
-                }
+                        loading=false
 
-                override fun handleWebserviceCallBackFailure(error: Int?) {
-                    geoCodedAdressCurrentLocation.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.NOREUSLT,
-                            null,
-                            "NO Address Found"
+                    }
+
+                    override fun handleWebserviceCallBackFailure(error: Int?) {
+                        geoCodedAdressCurrentLocation.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.NOREUSLT,
+                                null,
+                                "NO Address Found"
+                            )
                         )
-                    )
-                }
+                        loading=false
+
+                    }
 
 
-            })
+                })
+            }
         }
     }
 
     fun getMarkerAddressFromLatLong(latLng: LatLng) {
 
-        repository.init(_application)
+        if (!loading) {
+
+            loading = true
+            repository.init(_application)
 
 //        val encodeAPI = URLEncoder.encode(apiKey, "utf-8")
 
-        geoMarkerSelectedAdress.postValue(
-            ResultWrapper<ReversGeoCodeMain>(
-                Status.status.LOADING,
-                null, "Loading"
+            geoMarkerSelectedAdress.postValue(
+                ResultWrapper<ReversGeoCodeMain>(
+                    Status.status.LOADING,
+                    null, "Loading"
+                )
             )
-        )
-        val body = getJsonEncode(latLng)
-        if (body != null) {
-            Repository.getGeoAdress(body, apiKey, object :
-                IHandleAPICallBack<ReversGeoCodeMain> {
-                override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
-                    geoMarkerSelectedAdress.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.SUCCESS,
-                            response.body(),
-                            "Success"
+            val body = getJsonEncode(latLng)
+            if (body != null) {
+                Repository.getGeoAdress(body, apiKey, object :
+                    IHandleAPICallBack<ReversGeoCodeMain> {
+                    override fun handleWebserviceCallBackSuccess(response: Response<ReversGeoCodeMain>) {
+                        geoMarkerSelectedAdress.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.SUCCESS,
+                                response.body(),
+                                "Success"
+                            )
                         )
-                    )
-                }
+                        loading=false
 
-                override fun handleWebserviceCallBackFailure(error: String?) {
-                    geoMarkerSelectedAdress.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.ERROR,
-                            null,
-                            error
+                    }
+
+                    override fun handleWebserviceCallBackFailure(error: String?) {
+                        geoMarkerSelectedAdress.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.ERROR,
+                                null,
+                                error
+                            )
                         )
-                    )
-                }
+                        loading=false
+
+                    }
 
 
-                override fun onConnectionError() {
-                    geoMarkerSelectedAdress.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.ERROR,
-                            null,
-                            "Connection Error"
+                    override fun onConnectionError() {
+                        geoMarkerSelectedAdress.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.ERROR,
+                                null,
+                                "Connection Error"
+                            )
                         )
-                    )
-                }
+                        loading=false
 
-                override fun handleWebserviceCallBackFailure(error: Int?) {
-                    geoMarkerSelectedAdress.postValue(
-                        ResultWrapper<ReversGeoCodeMain>(
-                            Status.status.NOREUSLT,
-                            null,
-                            "NO Address Found"
+                    }
+
+                    override fun handleWebserviceCallBackFailure(error: Int?) {
+                        geoMarkerSelectedAdress.postValue(
+                            ResultWrapper<ReversGeoCodeMain>(
+                                Status.status.NOREUSLT,
+                                null,
+                                "NO Address Found"
+                            )
                         )
-                    )
+                        loading=false
 
-                }
+                    }
 
 
-            })
+                })
+            }
         }
     }
 

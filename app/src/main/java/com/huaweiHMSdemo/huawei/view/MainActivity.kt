@@ -50,9 +50,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel?.geoCodedAdressCurrentLocation?.observe(this, Observer {
             when (it.status) {
                 Status.status.SUCCESS -> {
-                    Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
                     UpdateCamera(curentLatLng)
                     addMarker(curentLatLng, it.data.sites[0].formatAddress)
+                    mainViewModel?.getMarkerAddressFromLatLong(clickLatlon)
 
                 }
                 Status.status.ERROR -> {
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mainViewModel?.geoMarkerSelectedAdress?.observe(this, Observer {
             when (it.status) {
                 Status.status.SUCCESS -> {
-                    Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, it.data.sites[0].formatAddress, Toast.LENGTH_SHORT).show()
                     addClickMarker(clickLatlon, it.data.sites[0].formatAddress)
                     UpdateCamera(clickLatlon)
                 }
@@ -123,9 +124,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     Status.status.SUCCESS -> {
 
                         curentLatLng = LatLng(it.data.latitude, it.data.longitude)
-                        clickLatlon = LatLng(it.data.latitude + 0.06, it.data.longitude)
+                        clickLatlon = LatLng(it.data.latitude +0.04, it.data.longitude)
                         mainViewModel?.getCurrentAddressFromLatLong(curentLatLng)
-                        mainViewModel?.getMarkerAddressFromLatLong(clickLatlon)
                         UpdateCamera(curentLatLng)
                     }
                     Status.status.ERROR -> {
